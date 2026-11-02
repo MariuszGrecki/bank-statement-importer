@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { getBankAccounts } from '@/api/bankAccounts';
+import { getBankAccounts, createBankAccount } from '@/api/bankAccounts';
 import type { BankAccount } from '@/types/bankAccounts';
 
 export const useBankAccountsStore = defineStore('bankAccounts', () => {
@@ -25,10 +25,17 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
     }
   }
 
+  async function add(name:string) : Promise<void> {
+    const account = await createBankAccount(name)
+
+    accounts.value.push(account)
+  }
+
   return {
     accounts,
     isLoading,
     error,
     load,
+    add
   }
 })
