@@ -8,6 +8,7 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
   const accounts = ref<BankAccount[]>([])
   const isLoading = ref<boolean>(false)
   const error = ref<string | null>(null)
+  const isAdding = ref<boolean>(false)
 
   async function load() : Promise<void> {
     isLoading.value = true;
@@ -18,22 +19,26 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
     } catch (caughtError) {
       console.error(caughtError);
       error.value = "Nie udało się pobrać kont bankowych"
-    }
-
-    finally {
+    } finally {
       isLoading.value = false
     }
   }
 
   async function add(name:string) : Promise<void> {
-    const account = await createBankAccount(name)
+    isAdding.value = true
 
-    accounts.value.push(account)
+    try {
+      const account = await createBankAccount(name)
+      accounts.value.push(account)
+    } finally {
+      isAdding.value = false
+    }
   }
 
   return {
     accounts,
     isLoading,
+    isAdding,
     error,
     load,
     add
