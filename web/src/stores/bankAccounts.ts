@@ -1,14 +1,16 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { getBankAccounts, createBankAccount } from '@/api/bankAccounts';
+import { getBankAccounts, createBankAccount, updateBankAccount, deleteBankAccount } from '@/api/bankAccounts';
 import type { BankAccount } from '@/types/bankAccounts';
+import BankAccountsView from '@/views/BankAccountsView.vue';
 
 export const useBankAccountsStore = defineStore('bankAccounts', () => {
   const accounts = ref<BankAccount[]>([])
   const isLoading = ref<boolean>(false)
   const error = ref<string | null>(null)
   const isAdding = ref<boolean>(false)
+  const isUpdating = ref<boolean>(false)
 
   async function load() : Promise<void> {
     isLoading.value = true;
@@ -35,12 +37,40 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
     }
   }
 
+  async function update(id:number, name:string) : Promise<void> {
+    isUpdating.value = true
+
+    try {
+      const changedBankAccount = await updateBankAccount(id, name)
+
+      console.log(changedBankAccount)
+
+      const index = accounts.value.findIndex((account) => account.id === changedBankAccount.id)
+
+      if (index !== -1) {
+        accounts.value[index] = changedBankAccount
+      }
+    } finally {
+      isUpdating.value = false
+    }
+  }
+
+  async function remove(id:number) : Promise<void> {
+    await deleteBankAccount(id)
+
+    accounts.value = accounts.value.filter((account) => account.id !== id)
+  }
+
+
   return {
     accounts,
     isLoading,
     isAdding,
+    isUpdating,
     error,
     load,
-    add
+    add,
+    update,
+    remove
   }
 })

@@ -29,7 +29,7 @@ class BankAccountRequest extends FormRequest
                 'string',
                 Rule::unique('bank_accounts', 'name')
                     ->where('user_id', $this->user()->id)
-                    ->ignore($this->route('bank_account')),
+                    ->ignore($this->route('bankAccount')),
                 'max:100'
             ]
         ];

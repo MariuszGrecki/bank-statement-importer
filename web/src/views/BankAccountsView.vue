@@ -7,6 +7,19 @@ import  BaseButton from '@/components/BaseButton.vue'
 const store = useBankAccountsStore()
 const newAccountName = ref('')
 const errors = ref<string | null>('')
+const editingError = ref<string | null>('')
+const editingBankAccountId = ref<number | null>(null)
+const editedBankAccountName = ref('')
+
+function startEditing(id:number, currentName: string): void {
+  editingBankAccountId.value = id
+  editedBankAccountName.value = currentName
+}
+
+function cancelProductEdit(): void {
+  editingBankAccountId.value = null
+  editingError.value = ''
+}
 
 onMounted(() => {
   store.load()
@@ -21,6 +34,23 @@ async function submit() {
   } catch (caughtError) {
     if (caughtError instanceof ApiError && caughtError.status == 422 ) {
       errors.value = caughtError.message
+    }
+  }
+}
+
+async function saveBankAccountEdit(): Promise<void> {
+  if (editingBankAccountId.value === null) {
+    return
+  }
+
+  editingError.value = ''
+
+  try {
+    await store.update(editingBankAccountId.value, editedBankAccountName.value)
+    editingBankAccountId.value = null
+  } catch (caughtError) {
+    if (caughtError instanceof ApiError && caughtError.status == 422 ) {
+      editingError.value = caughtError.message
     }
   }
 }
@@ -65,7 +95,25 @@ async function submit() {
           :key="bankAccount.id"
           class="border rounded-xl p-2"
       >
-        <span>{{ bankAccount.name }}</span>
+        <template v-if="editingBankAccountId === bankAccount.id">
+          <form @submit.prevent="saveBankAccountEdit">
+            <input type="text" v-model="editedBankAccountName">
+            <span v-if="editingError" class="text-red-600">{{ editingError }}</span>
+            <BaseButton type="submit" :disabled="store.isUpdating">
+              {{  store.isUpdating ? 'Zapisywanie' : 'Zapisz' }}
+            </BaseButton>
+            <BaseButton type="button" @click="cancelProductEdit">
+              Anuluj
+            </BaseButton>
+          </form>
+        </template>
+
+        <template v-else>
+          <span>{{ bankAccount.name }}</span>
+          <BaseButton type="button" @click="startEditing(bankAccount.id, bankAccount.name)">
+            Edytuj
+          </BaseButton>
+        </template>
       </li>
     </ul>
   </div>

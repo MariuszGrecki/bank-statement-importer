@@ -22,3 +22,15 @@ export async function createBankAccount(name: string): Promise<BankAccount> {
 
   return response.data
 }
+
+export async function updateBankAccount(id: number, name: string): Promise<BankAccount> {
+  const response = await http.put<BankAccountResponse>(`/bank-accounts/${id}`, {
+    name: name
+  })
+
+  return response.data
+}
+
+export async function deleteBankAccount(id: number ): Promise<void> {
+  await http.delete<void>(`/bank-accounts/${id}`)
+}
