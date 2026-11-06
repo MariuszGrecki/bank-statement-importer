@@ -11,6 +11,7 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
   const error = ref<string | null>(null)
   const isAdding = ref<boolean>(false)
   const isUpdating = ref<boolean>(false)
+  const isDeleting = ref<boolean>(false)
 
   async function load() : Promise<void> {
     isLoading.value = true;
@@ -56,9 +57,14 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
   }
 
   async function remove(id:number) : Promise<void> {
-    await deleteBankAccount(id)
+    isDeleting.value = true
 
-    accounts.value = accounts.value.filter((account) => account.id !== id)
+    try {
+      await deleteBankAccount(id)
+      accounts.value = accounts.value.filter((account) => account.id !== id)
+    } finally {
+      isDeleting.value = false
+    }
   }
 
 
@@ -67,6 +73,7 @@ export const useBankAccountsStore = defineStore('bankAccounts', () => {
     isLoading,
     isAdding,
     isUpdating,
+    isDeleting,
     error,
     load,
     add,

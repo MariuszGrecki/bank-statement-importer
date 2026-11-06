@@ -16,7 +16,7 @@ function startEditing(id:number, currentName: string): void {
   editedBankAccountName.value = currentName
 }
 
-function cancelProductEdit(): void {
+function cancelBankAccountEdit(): void {
   editingBankAccountId.value = null
   editingError.value = ''
 }
@@ -53,6 +53,18 @@ async function saveBankAccountEdit(): Promise<void> {
       editingError.value = caughtError.message
     }
   }
+}
+
+async function confirmDeleteBankAccount(id:number, name:string): Promise<void> {
+  const accepted = window.confirm(
+    `Usunac kategorie "${name}"? Tej operacji nie można cofnąć`
+  )
+
+  if (!accepted) {
+    return
+  }
+
+  await store.remove(id)
 }
 </script>
 
@@ -93,26 +105,38 @@ async function saveBankAccountEdit(): Promise<void> {
     <ul class="mt-6 space-y-2">
       <li v-for="bankAccount in store.accounts"
           :key="bankAccount.id"
-          class="border rounded-xl p-2"
+          class="border rounded-xl p-2 flex items-center"
       >
         <template v-if="editingBankAccountId === bankAccount.id">
-          <form @submit.prevent="saveBankAccountEdit">
-            <input type="text" v-model="editedBankAccountName">
+          <form @submit.prevent="saveBankAccountEdit" class="flex items-center gap-2">
+            <input type="text" v-model="editedBankAccountName" class="border-2 border-blue-500 rounded px-3 py-2">
             <span v-if="editingError" class="text-red-600">{{ editingError }}</span>
-            <BaseButton type="submit" :disabled="store.isUpdating">
-              {{  store.isUpdating ? 'Zapisywanie' : 'Zapisz' }}
-            </BaseButton>
-            <BaseButton type="button" @click="cancelProductEdit">
-              Anuluj
-            </BaseButton>
+            <div class="ml-auto flex gap-2">
+              <BaseButton type="submit" :disabled="store.isUpdating">
+                {{  store.isUpdating ? 'Zapisywanie' : 'Zapisz' }}
+              </BaseButton>
+              <BaseButton type="button" @click="cancelBankAccountEdit">
+                Anuluj
+              </BaseButton>
+            </div>
           </form>
         </template>
 
         <template v-else>
           <span>{{ bankAccount.name }}</span>
-          <BaseButton type="button" @click="startEditing(bankAccount.id, bankAccount.name)">
-            Edytuj
-          </BaseButton>
+          <div class="ml-auto flex gap-2">
+            <BaseButton type="button" @click="startEditing(bankAccount.id, bankAccount.name)">
+              Edytuj
+            </BaseButton>
+            <BaseButton
+              type="button"
+              variant="danger"
+              @click="confirmDeleteBankAccount(bankAccount.id, bankAccount.name)"
+              :disabled="store.isDeleting"
+            >
+              {{ store.isDeleting ? 'Usuwanie...' : "Usuń" }}
+            </BaseButton>
+          </div>
         </template>
       </li>
     </ul>
