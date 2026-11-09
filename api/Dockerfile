@@ -6,7 +6,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git unzip \
     && rm -rf /var/lib/apt/lists/* \
-    && install-php-extensions pdo_pgsql pcntl redis bcmath intl zip
+    && install-php-extensions pdo_pgsql pcntl redis bcmath intl zip xdebug
 
 ARG UID=1000
 ARG GID=1000
@@ -16,6 +16,7 @@ RUN groupadd -g ${GID} app \
     && chown -R app:app /var/www/html
 
 COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/99-xdebug.ini
 
 WORKDIR /var/www/html
 USER app

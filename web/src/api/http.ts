@@ -27,7 +27,9 @@ export function configureHttp(newConfig: HttpConfig): void {
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' }
-  if (body !== undefined) {
+  const isFormData = body instanceof FormData
+
+  if (body !== undefined && !isFormData) {
     headers['Content-Type'] = 'application/json'
   }
 
@@ -36,10 +38,16 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
     headers.Authorization = `Bearer ${token}`
   }
 
+  const requestBody = body === undefined
+    ? undefined
+    : isFormData
+      ? body
+      : JSON.stringify(body)
+
   const response = await fetch(`${import.meta.env.VITE_API_URL}/api${path}`, {
     method,
     headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: requestBody,
   })
 
   if (response.status === 401) {

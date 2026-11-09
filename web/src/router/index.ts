@@ -40,15 +40,21 @@ export const routes: RouteRecordRaw[] = [
     meta: { guestOnly: true },
   },
   {
-    path: '/:pathMatch(.*)*',
-    name: 'not-found',
-    component: () => import('../views/NotFoundView.vue'),
-  },
-  {
     path: '/konta',
     name: 'bank-accounts',
     component: () => import('../views/BankAccountsView.vue'),
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/importy/nowy',
+    name: 'import-upload',
+    component: () => import('../views/ImportUploadView.vue'),
+    meta: { requiresAuth: true}
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../views/NotFoundView.vue'),
   },
 ]
 

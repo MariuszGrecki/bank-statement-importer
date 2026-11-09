@@ -41,8 +41,9 @@ async function submit() {
 </script>
 
 <template>
-  <main>
-    <h1>Rejestracja</h1>
+  <main class="mx-auto mt-10 max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:mt-16 sm:p-8">
+    <p class="text-sm font-bold uppercase tracking-[0.16em] text-blue-600">Nowe konto</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-950">Rejestracja</h1>
 
     <form class="auth-form" @submit.prevent="submit">
       <p v-if="generalError" class="form-error" role="alert">{{ generalError }}</p>
@@ -80,6 +81,6 @@ async function submit() {
       </button>
     </form>
 
-    <p>Masz już konto? <RouterLink :to="{ name: 'login' }">Zaloguj się</RouterLink></p>
+    <p class="mt-6 text-sm text-slate-600">Masz już konto? <RouterLink :to="{ name: 'login' }" class="font-semibold text-blue-700 hover:text-blue-800">Zaloguj się</RouterLink></p>
   </main>
 </template>

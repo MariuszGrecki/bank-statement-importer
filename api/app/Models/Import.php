@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
         'imported_rows',
         'skipped_rows',
         'error_message',
+        'bank_account_id',
         'started_at',
         'finished_at',
         'rolled_back_at'
