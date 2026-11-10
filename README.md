@@ -2,6 +2,10 @@
 
 Importer i kategoryzator wyciągów bankowych. Laravel 13 (API) + Vue 3 + Postgres.
 
+## Architektura
+
+![Diagram architektury aplikacji: kreator Vue komunikuje się z API Laravel, które zapisuje dane operacyjne w PostgreSQL i CSV w SeaweedFS; diagram pokazuje też planowane kolejki i warstwę analityczną.](docs/images/architecture-v2.png)
+
 ## Jak uruchomić
 
 ```sh
