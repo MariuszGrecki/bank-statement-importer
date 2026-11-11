@@ -41,6 +41,7 @@ class Import extends Model
     protected function casts(): array
     {
         return [
+            'bank_account_id' => 'integer',
             'started_at' => 'datetime',
             'finished_at' => 'datetime',
             'rolled_back_at' => 'datetime',

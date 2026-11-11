@@ -33,7 +33,9 @@ class StoreImportRequest extends FormRequest
             ],
             'file' => [
                 'required',
-                File::types(['csv'])->max('10mb')
+                File::types(['text/plain', 'text/csv'])
+                    ->extensions(['csv'])
+                    ->max('10mb')
             ]
         ];
     }
@@ -46,7 +48,8 @@ class StoreImportRequest extends FormRequest
             'bank_account_id.exists' => 'Wybrane konto nie istnieje lub nie masz do niego dostępu.',
             'file.required' => 'Wybierz plik CSV do importu.',
             'file.file' => 'Przesłana wartość musi być plikiem.',
-            'file.mimes' => 'Wybierz plik w formacie CSV.',
+            'file.mimetypes' => 'Wybierz plik w formacie CSV.',
+            'file.extensions' => 'Plik musi mieć rozszerzenie .csv.',
             'file.max' => 'Plik CSV może mieć maksymalnie 10 MB.',
         ];
     }

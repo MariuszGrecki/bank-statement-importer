@@ -58,7 +58,7 @@ async function submit() {
 
 <template>
   <form
-    class="mx-auto max-w-xl space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+    class="mx-auto mt-8 max-w-xl space-y-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:mt-10 sm:p-8"
     @submit.prevent="submit"
   >
   <div class="space-y-2">
@@ -83,7 +83,7 @@ async function submit() {
     </option>
 
   </select>
-  <span v-if="bankAccountIdError">{{ bankAccountIdError }}</span>
+  <span v-if="bankAccountIdError" class="block text-sm font-medium text-red-600">{{ bankAccountIdError }}</span>
   </div>
   <p class="text-sm text-slate-600">
     Wybrano konto: <span class="font-medium text-slate-900">{{ selectedBankAccountId ?? 'brak' }}</span>
@@ -97,7 +97,7 @@ async function submit() {
     accept=".csv,text/csv"
     @change="selectFile"
   >
-  <span v-if="fileError">{{ fileError }}</span>
+  <span v-if="fileError" class="block text-sm font-medium text-red-600">{{ fileError }}</span>
   <p v-if="selectedFile" class="text-sm text-slate-600">
     Wybrany plik: <span class="font-medium text-slate-900">{{ selectedFile.name }}</span>
   </p>

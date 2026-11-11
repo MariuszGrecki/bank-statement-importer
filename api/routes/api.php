@@ -15,7 +15,6 @@ Route::middleware('throttle:10,1')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
-    Route::post('/imports', [ImportController::class, 'store']);
 });
 
 Route::middleware('auth:sanctum')
@@ -27,3 +26,11 @@ Route::middleware('auth:sanctum')
         Route::match(['put', 'patch'], '/{bankAccount}', [BankAccountController::class, 'update']);
         Route::delete('/{bankAccount}', [BankAccountController::class, 'destroy']);
     });
+
+Route::middleware('auth:sanctum')
+    ->prefix('imports')
+    ->group(function () {
+        Route::post('/', [ImportController::class, 'store']);
+            Route::get('/{import}/preview', [ImportController::class, 'preview']);
+    });
+
