@@ -4,3 +4,8 @@ export interface Import {
   status: 'queued' | 'processing' | 'completed' | 'failed' | 'rolled_back',
   original_filename: string
 }
+
+export interface ImportPreview {
+  headers: string[]
+  rows: string[][]
+}

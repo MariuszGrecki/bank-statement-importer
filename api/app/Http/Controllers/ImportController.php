@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Imports\PreviewImportAction;
 use App\Http\Requests\StoreImportRequest;
 use App\Http\Resources\ImportResource;
 use Illuminate\Http\Request;
 use App\Models\Import;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 
 class ImportController extends Controller
 {
+    public function __construct(
+        private readonly PreviewImportAction $previewImportAction
+    ){}
+
     /**
      * Display a listing of the resource.
      */
@@ -43,18 +47,9 @@ class ImportController extends Controller
     {
         Gate::authorize('view', $import);
 
-        $file = Storage::disk('s3')->readStream($import->file_path);
+        $data = $this->previewImportAction->handle($import);
 
-
-        if ($file !== false) {
-            while (($wiersz = fgetcsv($file, 0, ';')) !== false) {
-                print_r($wiersz);
-            }
-
-            fclose($file);
-        }
-
-        return new ImportResource($import);
+        return response()->json($data);
     }
 
 

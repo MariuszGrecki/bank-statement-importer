@@ -1,4 +1,4 @@
-import type { Import } from "@/types/import";
+import type { Import, ImportPreview } from "@/types/import";
 import { http } from '@/api/http';
 
 interface ImportResponse {
@@ -13,4 +13,8 @@ export async function createImport(bankAccountId: number, file: File): Promise<I
   const response = await http.post<ImportResponse>('/imports', formData)
 
   return response.data
+}
+
+export async function getImportPreview(importId: number): Promise<ImportPreview> {
+  return http.get<ImportPreview>(`/imports/${importId}/preview`)
 }
