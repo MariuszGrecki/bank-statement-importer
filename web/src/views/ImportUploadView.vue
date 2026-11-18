@@ -14,6 +14,10 @@ const isSubmitting = ref<boolean>(false)
 const bankAccountIdError = ref<string | null>(null)
 const fileError = ref<string | null>(null)
 const preview = ref<ImportPreview | null>(null)
+const selectedDateHeader = ref<string | null>(null)
+const selectedQuotaHeader = ref<string | null>(null)
+const selectedDescriptionHeader = ref<string | null>(null)
+const selectedContractorHeader = ref<string | null>(null)
 
 onMounted(() => {
   store.load()
@@ -108,6 +112,95 @@ async function submit() {
     v-if="preview"
     class="mx-auto mt-6 max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
   >
+    <div class="grid gap-5 border-b border-slate-200 bg-slate-50 p-5 sm:grid-cols-2 sm:p-6">
+      <div class="space-y-2">
+        <label for="date-column" class="block text-sm font-semibold text-slate-800"
+          >Kolumna daty</label
+        >
+        <select
+          id="date-column"
+          v-model="selectedDateHeader"
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
+        >
+          <option :value="null" disabled>Wybierz kolumnę</option>
+          <option v-for="header in preview.headers" :key="header" :value="header">
+            {{ header }}
+          </option>
+        </select>
+        <span
+          v-if="selectedDateHeader"
+          class="inline-flex rounded-md bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700"
+        >
+          {{ selectedDateHeader }}
+        </span>
+      </div>
+
+      <div class="space-y-2">
+        <label for="quota-column" class="block text-sm font-semibold text-slate-800"
+          >Kolumna kwoty</label
+        >
+        <select
+          id="quota-column"
+          v-model="selectedQuotaHeader"
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
+        >
+          <option :value="null" disabled>Wybierz kolumnę</option>
+          <option v-for="header in preview.headers" :key="header" :value="header">
+            {{ header }}
+          </option>
+        </select>
+        <span
+          v-if="selectedQuotaHeader"
+          class="inline-flex rounded-md bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700"
+        >
+          {{ selectedQuotaHeader }}
+        </span>
+      </div>
+
+      <div class="space-y-2">
+        <label for="description-column" class="block text-sm font-semibold text-slate-800"
+          >Kolumna opisu</label
+        >
+        <select
+          id="description-column"
+          v-model="selectedDescriptionHeader"
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
+        >
+          <option :value="null" disabled>Wybierz kolumnę</option>
+          <option v-for="header in preview.headers" :key="header" :value="header">
+            {{ header }}
+          </option>
+        </select>
+        <span
+          v-if="selectedDescriptionHeader"
+          class="inline-flex rounded-md bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700"
+        >
+          {{ selectedDescriptionHeader }}
+        </span>
+      </div>
+
+      <div class="space-y-2">
+        <label for="contractor-column" class="block text-sm font-semibold text-slate-800"
+          >Kolumna kontrahenta</label
+        >
+        <select
+          id="contractor-column"
+          v-model="selectedContractorHeader"
+          class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-slate-900 outline-none transition focus:border-slate-900 focus:ring-2 focus:ring-slate-200"
+        >
+          <option :value="null" disabled>Wybierz kolumnę</option>
+          <option v-for="header in preview.headers" :key="header" :value="header">
+            {{ header }}
+          </option>
+        </select>
+        <span
+          v-if="selectedContractorHeader"
+          class="inline-flex rounded-md bg-slate-200 px-2 py-1 text-xs font-semibold text-slate-700"
+        >
+          {{ selectedContractorHeader }}
+        </span>
+      </div>
+    </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
         <thead>
